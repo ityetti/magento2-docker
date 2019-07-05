@@ -1,0 +1,74 @@
+version: '3.7'
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
+    ports:
+      - "81:81"
+    expose:
+      - "81"
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./:/opt/app"
+    command: nginx
+    environment:
+      XDEBUG_CONFIG: "remote_host=localhost"
+      PHP_IDE_CONFIG: "serverName=Docker"
+  php-fpm:
+    build:
+      context: .
+      dockerfile: .docker/php-fpm/Dockerfile
+    expose:
+      - "9000"
+    volumes:
+      - "./:/opt/app"
+    stdin_open: true
+    tty: true
+    command: php-fpm
+  magento:
+    build:
+      context: .
+      dockerfile: .docker/magento/Dockerfile
+    volumes:
+      - "./:/opt/app"
+    stdin_open: true
+    tty: true
+    command: magento
+  codesniffer:
+    build:
+      context: .
+      dockerfile: .docker/codesniffer/Dockerfile
+    volumes:
+      - "./:/opt/app"
+    stdin_open: true
+    tty: true
+    command: codesniffer
+  composer:
+    build:
+      context: .
+      dockerfile: .docker/composer/Dockerfile
+    volumes:
+       - "./:/opt/app"
+    stdin_open: true
+    tty: true
+    command: composer
+  node:
+    build:
+      context: .
+      dockerfile: .docker/node/Dockerfile
+    volumes:
+      - "./:/opt/app"
+    stdin_open: true
+    tty: true
+    command: node
+  xdebug:
+    build:
+      context: .
+      dockerfile: .docker/xdebug/Dockerfile
+    volumes:
+      - "./:/opt/app"
+    stdin_open: true
+    tty: true
+    command: xdebug
