@@ -2,13 +2,17 @@ version: '3.7'
 services:
 
   nginx:
-    image: <your-local-build>:latest
-    # build: .
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
     ports:
-      - "80:80" # web
-      - "9001:9000" # xdebug
-      # - "35729:35729" # live reload
+      - "80:80"
+    expose:
+      - "80"
+    stdin_open: true
+    tty: true
     volumes:
+      - ./:/opt/app
       - ./src:/var/www/html
       - ~/.composer:/var/www/.composer
       - ~/.npm:/var/www/.npm
@@ -19,6 +23,21 @@ services:
       - db
     links:
       - db
+    command: nginx
+    networks:
+      - dev-network
+
+  php-fpm:
+    build:
+      context: .
+      dockerfile: .docker/php-fpm/Dockerfile
+    expose:
+      - "9000"
+    volumes:
+      - ./:/opt/app
+    stdin_open: true
+    tty: true
+    command: php-fpm
     networks:
       - dev-network
 
@@ -56,19 +75,19 @@ services:
       - dev-network
 
   redis-session:
-      image: redis
-      ports:
-        - 6379
-      networks:
-        - dev-network
+    image: redis
+    ports:
+      - 6379
+    networks:
+      - dev-network
 
-#  mailhog:
-#    image: mailhog/mailhog
-#    ports:
-#      - 1025:1025
-#      - 8025:8025
-#    networks:
-#      - dev-network
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - dev-network
 
 networks:
   dev-network:

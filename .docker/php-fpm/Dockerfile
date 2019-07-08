@@ -1,5 +1,6 @@
 FROM centos:7
 
+# Install PHP 7.2.*
 RUN yum update -y && \
     yum install -y epel-release
 
@@ -27,19 +28,41 @@ RUN yum install -y \
     php-pear \
     php-devel
 
-## Install Magento Dependencies
-#RUN yum install -y \
-#    curl \
-#    git \
-#    gnupg \
-#    vim \
-#    wget \
-#    lynx \
-#    psmisc \
-#    unzip \
-#    tar \
-#    bash-completion
+# Install Magento Dependencies
+RUN yum install -y \
+    curl \
+    git \
+    gnupg \
+    vim \
+    wget \
+    lynx \
+    psmisc \
+    unzip \
+    tar \
+    bash-completion
 
+# Install Node, NVM, NPM and Grunt
+RUN yum install -y gcc-c++ make \
+    && curl -sL https://rpm.nodesource.com/setup_12.x | bash - \
+    && yum install -y nodejs \
+    && npm install -y -g grunt
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+
+# Install Code Sniffer
+RUN git clone https://github.com/magento/marketplace-eqp.git ~/.composer/vendor/magento/marketplace-eqp
+RUN cd ~/.composer/vendor/magento/marketplace-eqp && composer install
+RUN ln -s ~/.composer/vendor/magento/marketplace-eqp/vendor/bin/phpcs /usr/local/bin;
+
+# Install XDebug
+ENV XDEBUG_PORT 9000
+ENV XDEBUG_IDKEY PHPSTORM
+
+RUN yes | pecl install xdebug && \
+    echo "zend_extension=$(find /usr/lib64/php/modules/ -name xdebug.so)" > /etc/php.d/xdebug.ini
+
+# Set user and fix permissions
 RUN useradd -M -d /opt/app -s /bin/false nginx
 
 RUN mkdir -p /run/php-fpm && \

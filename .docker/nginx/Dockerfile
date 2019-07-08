@@ -1,5 +1,7 @@
 FROM centos:7
 
+# Install Nginx
+
 RUN yum update -y && \
     yum install -y epel-release
 
