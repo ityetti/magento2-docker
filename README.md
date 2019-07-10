@@ -4,4 +4,4 @@
 
 ### CentOS 7 + Nginx + PHP-FPM 7.2 + Node + Grunt + XDebug + Redis
 
-#### Version: Alpha
+#### Version: Beta
