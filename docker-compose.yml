@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 services:
 
   nginx:
@@ -13,7 +13,6 @@ services:
     tty: true
     volumes:
       - ./:/opt/app
-      - ./src:/var/www/html
       - ~/.composer:/var/www/.composer
       - ~/.npm:/var/www/.npm
     environment:

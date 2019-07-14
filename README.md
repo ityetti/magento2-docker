@@ -4,4 +4,10 @@
 
 ### CentOS 7 + Nginx + PHP-FPM 7.2 + Node + Grunt + XDebug + Redis
 
+The project directory will mount to ```/opt/app```.
+
+```
+docker-compose up
+```
+
 #### Version: Beta
