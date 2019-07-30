@@ -22,6 +22,7 @@ services:
       - db
     links:
       - db
+      - php-fpm
     command: nginx
     networks:
       - dev-network
@@ -34,6 +35,8 @@ services:
       - "9000"
     volumes:
       - ./:/opt/app
+    links:
+      - db
     stdin_open: true
     tty: true
     command: php-fpm
@@ -65,6 +68,8 @@ services:
       - 8080:80
     networks:
       - dev-network
+    links:
+      - db
 
   redis:
     image: redis

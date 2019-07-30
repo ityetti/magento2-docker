@@ -22,7 +22,6 @@ RUN yum install -y \
     php-mysql \
     php-pdo \
     php-soap \
-    php-pecl-apcu \
     php-pecl-imagick \
     php-zip \
     php-pear \
@@ -77,4 +76,6 @@ COPY ./.docker/php-fpm/php.ini /etc/php.ini
 
 RUN yum clean all
 
-CMD php-fpm
+WORKDIR /opt/app/public
+
+CMD ["php-fpm"]
