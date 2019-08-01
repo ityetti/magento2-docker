@@ -5,14 +5,15 @@ services:
     build:
       context: .
       dockerfile: .docker/nginx/Dockerfile
+    container_name: nginx
     ports:
-      - "80:80"
+      - 80:80
     expose:
-      - "80"
+      - 80
     stdin_open: true
     tty: true
     volumes:
-      - ./:/opt/app
+      - ./public:/opt/app
       - ~/.composer:/var/www/.composer
       - ~/.npm:/var/www/.npm
     environment:
@@ -31,12 +32,13 @@ services:
     build:
       context: .
       dockerfile: .docker/php-fpm/Dockerfile
+    container_name: php-fpm
+    ports:
+      - 9000:9000
     expose:
-      - "9000"
+      - 9000
     volumes:
-      - ./:/opt/app
-    links:
-      - db
+      - ./public:/opt/app
     stdin_open: true
     tty: true
     command: php-fpm
@@ -45,6 +47,7 @@ services:
 
   db:
     image: percona
+    container_name: db
     ports:
       - 3300:3306
     environment:
@@ -59,6 +62,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
     environment:
       - PMA_HOST=db
       - PMA_USER=root
@@ -73,6 +77,7 @@ services:
 
   redis:
     image: redis
+    container_name: redis
     ports:
       - 6379
     networks:
@@ -80,6 +85,7 @@ services:
 
   redis-session:
     image: redis
+    container_name: redis-session
     ports:
       - 6379
     networks:
@@ -87,6 +93,7 @@ services:
 
   mailhog:
     image: mailhog/mailhog
+    container_name: mailhog
     ports:
       - 1025:1025
       - 8025:8025
