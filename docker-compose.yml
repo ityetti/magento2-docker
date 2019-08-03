@@ -1,95 +1,77 @@
 version: '3'
-services:
 
+services:
   nginx:
-    build:
-      context: .
-      dockerfile: .docker/nginx/Dockerfile
+    build: ./nginx
     container_name: nginx
     ports:
-      - 80:80
-    expose:
-      - 80
-    stdin_open: true
-    tty: true
+      - 8000:80
     volumes:
-      - ./public:/opt/app
-      - ~/.composer:/var/www/.composer
-      - ~/.npm:/var/www/.npm
+      - ./magento2:/data/magento2/httpdocs
     environment:
       XDEBUG_CONFIG: "remote_host=localhost"
-      PHP_IDE_CONFIG: "serverName=Docker"
     depends_on:
-      - db
-    links:
-      - db
+      - mysql
+      - redis
       - php-fpm
-    command: nginx
     networks:
-      - dev-network
+      - magento
 
   php-fpm:
-    build:
-      context: .
-      dockerfile: .docker/php-fpm/Dockerfile
+    build: ./php-fpm
     container_name: php-fpm
     ports:
       - 9000:9000
-    expose:
-      - 9000
     volumes:
-      - ./public:/opt/app
-    stdin_open: true
-    tty: true
-    command: php-fpm
+      - ./magento2:/data/magento2/httpdocs
+      - ./php-fpm/php.ini:/etc/php.ini
+    depends_on:
+      - mysql
+      - redis
     networks:
-      - dev-network
-
-  db:
-    image: percona
-    container_name: db
-    ports:
-      - 3300:3306
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=magento
-      - MYSQL_USER=magento
-      - MYSQL_PASSWORD=magento
-    volumes:
-      - dbdata:/var/lib/mysql
-    networks:
-      - dev-network
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    environment:
-      - PMA_HOST=db
-      - PMA_USER=root
-      - PMA_PASSWORD=root
-      - MYSQL_ROOT_PASSWORD=root
-    ports:
-      - 8080:80
-    networks:
-      - dev-network
-    links:
-      - db
+      - magento
 
   redis:
     image: redis
     container_name: redis
     ports:
-      - 6379
+      - 6379:6379
     networks:
-      - dev-network
+      - magento
 
-  redis-session:
-    image: redis
-    container_name: redis-session
+  mysql:
+    image: percona
+    container_name: mysql
+    volumes:
+      - ./percona/mysqld.cnf:/etc/mysql/percona-server.conf.d/mysqld.cnf
+    environment:
+      MYSQL_DATABASE: 'magento_db'
+      MYSQL_ROOT_PASSWORD: 'root_pass'
+      MYSQL_USER: 'magento_user'
+      MYSQL_PASSWORD: 'PASSWD#'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'false'
     ports:
-      - 6379
+      - 3308:3306
     networks:
-      - dev-network
+      - magento
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - /sessions
+    external_links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - magento
 
   mailhog:
     image: mailhog/mailhog
@@ -98,12 +80,8 @@ services:
       - 1025:1025
       - 8025:8025
     networks:
-      - dev-network
+      - magento
 
 networks:
-  dev-network:
+  magento:
     driver: bridge
-
-volumes:
-  dbdata:
-    driver: local
