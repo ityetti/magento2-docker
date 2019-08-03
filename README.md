@@ -13,24 +13,24 @@ The docker stack is composed of the following containers
 - mailhog
 
 #### Container nginx
-Builds from the nginx folder.
-Mounts the folder magento2 from the project main folder into the container volume /data/magento2/httpdocs
+Builds from the nginx folder. <br>
+Mounts the folder magento2 from the project main folder into the container volume `/data/magento2/httpdocs`.<br>
 Opens local port: `8000`
 
 #### Container php-fpm
-Builds from the php-fpm folder.
-Mounts the folder magento2 from the project main folder into the container volume /data/magento2/httpdocs
-This container includes all dependencies for magento 2 (Also contain composer, node, grunt, code sniffer and xDebug)
+Builds from the php-fpm folder.<br>
+Mounts the folder magento2 from the project main folder into the container volume `/data/magento2/httpdocs`.<br>
+This container includes all dependencies for magento 2 (Also contain composer, node, grunt, code sniffer and xDebug).<br>
 Opens local port: `9000`
 
 ### Container phpmyadmin:
-Creates a fully working phpmyadmin container.
+Creates a fully working phpmyadmin container.<br>
 Opens up port: `8080`
         
     To access phpmyadmin http://localhost:8080 or http://ip_of_the_docker_server:8080
 
 ### Container redis:
-Starts a redis container.
+Starts a redis container.<br>
 Opens up port: `6379`
 
 ### Container mysql:
@@ -47,7 +47,7 @@ Opens up port: `3306`
 Note: On your host, port 3306 might already be in use. So before running docker-compose.yml, under the docker-compose.yml's mysql section change the host's port number to something other than 3306, select any as long as that port is not already being used locally on your machine.
 
 ### Container mailhog:
-Starts a mailhog container.
+Starts a mailhog container.<br>
 Opens up port: `1025` and `8025`
 
 ## Setup
