@@ -7,7 +7,7 @@ services:
     ports:
       - 8000:80
     volumes:
-      - ./magento2:/data/magento2/httpdocs
+      - ./magento2:/data/magento2/httpdocs:cached
     environment:
       XDEBUG_CONFIG: "remote_host=localhost"
     depends_on:
@@ -23,7 +23,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - ./magento2:/data/magento2/httpdocs
+      - ./magento2:/data/magento2/httpdocs:cached
       - ./php-fpm/php.ini:/etc/php.ini
     depends_on:
       - mysql
