@@ -28,6 +28,8 @@ services:
     depends_on:
       - mysql
       - redis
+      - rabbitmq
+      - elasticsearch
     networks:
       - magento
 
@@ -79,6 +81,24 @@ services:
     ports:
       - 1025:1025
       - 8025:8025
+    networks:
+      - magento
+
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+    restart: always
+    networks:
+      - magento
+
+  elasticsearch:
+    image: elasticsearch:7.5.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    restart: always
     networks:
       - magento
 
