@@ -95,6 +95,7 @@ services:
 
   elasticsearch:
     image: elasticsearch:7.5.0
+    container_name: elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"
