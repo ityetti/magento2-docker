@@ -50,6 +50,14 @@ Note: On your host, port 3306 might already be in use. So before running docker-
 Starts a mailhog container.<br>
 Opens up port: `1025` and `8025`
 
+### Container rabbitmq:
+Starts a rabbitmq container.<br>
+Opens up port: `5672`
+
+### Container elasticsearch 7.5.0:
+Starts a elasticsearch container.<br>
+Opens up port: `9200` and `9300`
+
 ## Setup
 To start/build the stack.
 
