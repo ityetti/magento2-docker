@@ -1,0 +1,19 @@
+version: '2'
+
+options:
+  compose-file-path: 'docker-compose.yml'
+  compose-dev-file-path: 'docker-compose-dev.yml'
+  verbose: false
+  cli_mode: 'auto'
+  max_attempt: 5
+  project_root: 'pwd'
+
+syncs:
+  magento2:
+    sync_strategy: 'rsync'
+    sync_host_port: 11256
+    notify_terminal: true
+    sync_userid: '2000'
+    host_disk_mount_mode: 'default'
+    src: './magento2/'
+    sync_excludes: ['vendor/bin']

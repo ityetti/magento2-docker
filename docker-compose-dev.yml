@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  nginx:
+    volumes:
+      - magento2:/home/magento:default
+  php-fpm:
+    volumes:
+      - magento2:/home/magento:default
+
+volumes:
+  magento2:
+    external: true
