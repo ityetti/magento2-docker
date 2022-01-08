@@ -1,13 +1,13 @@
-version: '3'
+version: '2'
 
 services:
   nginx:
     build: ./nginx
     container_name: nginx
     ports:
-      - 8000:80
+      - "8000:80"
     volumes:
-      - ./magento2:/home/magento:cached
+      - ./magento2:/home/magento:default
     environment:
       XDEBUG_CONFIG: "remote_host=localhost"
     depends_on:
@@ -21,9 +21,9 @@ services:
     build: ./php-fpm
     container_name: php-fpm
     ports:
-      - 9000:9000
+      - "9000:9000"
     volumes:
-      - ./magento2:/home/magento:cached
+      - ./magento2:/home/magento:default
       - ./php-fpm/php.ini:/etc/php.ini
     depends_on:
       - mysql
@@ -34,18 +34,18 @@ services:
       - magento
 
   redis:
-    image: redis
+    image: redis:6.0
     container_name: redis
     ports:
-      - 6379:6379
+      - "6379:6379"
     networks:
       - magento
 
   mysql:
-    image: percona
+    image: mysql:8.0.27
     container_name: mysql
     volumes:
-      - ./percona/mysqld.cnf:/etc/mysql/percona-server.conf.d/mysqld.cnf
+      - ./mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
     environment:
       MYSQL_DATABASE: 'magento_db'
       MYSQL_ROOT_PASSWORD: 'root_pass'
@@ -53,7 +53,7 @@ services:
       MYSQL_PASSWORD: 'PASSWD#'
       MYSQL_ALLOW_EMPTY_PASSWORD: 'false'
     ports:
-      - 3308:3306
+      - "3308:3306"
     networks:
       - magento
 
@@ -64,7 +64,7 @@ services:
       - PMA_ARBITRARY=1
     restart: always
     ports:
-      - 8080:80
+      - "8080:80"
     volumes:
       - /sessions
     external_links:
@@ -79,22 +79,23 @@ services:
     image: mailhog/mailhog
     container_name: mailhog
     ports:
-      - 1025:1025
-      - 8025:8025
+      - "1025:1025"
+      - "8025:8025"
     networks:
       - magento
 
   rabbitmq:
-    image: rabbitmq
+    image: rabbitmq:3.8.26
     container_name: rabbitmq
     ports:
+      - "15672:15672"
       - "5672:5672"
     restart: always
     networks:
       - magento
 
   elasticsearch:
-    image: elasticsearch:7.5.0
+    image: elasticsearch:7.9.3
     container_name: elasticsearch
     ports:
       - "9200:9200"
@@ -102,6 +103,10 @@ services:
     restart: always
     networks:
       - magento
+    environment:
+      - "discovery.type=single-node"
+      ## Set custom heap size to avoid memory errors
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
 
 networks:
   magento:
