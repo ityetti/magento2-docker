@@ -70,5 +70,6 @@ RUN mkdir -p /var/run/php-fpm
 ADD www.conf /etc/php-fpm.d/www.conf
 
 EXPOSE 9000
+EXPOSE 15672
 
 ENTRYPOINT ["/usr/sbin/php-fpm", "-F"]

@@ -85,7 +85,7 @@ services:
       - magento
 
   rabbitmq:
-    image: rabbitmq:3.8.26
+    image: rabbitmq:3.8-management
     container_name: rabbitmq
     ports:
       - "15672:15672"
