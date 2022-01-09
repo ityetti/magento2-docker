@@ -7,9 +7,10 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./magento2:/home/magento:cached
-    environment:
-      XDEBUG_CONFIG: "remote_host=localhost"
+      - ./magento2/app/code:/home/magento/app/code:cached
+      - ./magento2/app/design:/home/magento/app/design:cached
+      - ./magento2/var/log:/home/magento/var/log:cached
+      - ./magento2/var/report:/home/magento/var/report:cached
     depends_on:
       - mysql
       - redis
@@ -20,10 +21,11 @@ services:
   php-fpm:
     build: ./php-fpm
     container_name: php-fpm
-    ports:
-      - "9000:9000"
     volumes:
-      - ./magento2:/home/magento:cached
+      - ./magento2/app/code:/home/magento/app/code:cached
+      - ./magento2/app/design:/home/magento/app/design:cached
+      - ./magento2/var/log:/home/magento/var/log:cached
+      - ./magento2/var/report:/home/magento/var/report:cached
       - ./php-fpm/php.ini:/etc/php.ini
     depends_on:
       - mysql
