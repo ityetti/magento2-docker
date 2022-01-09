@@ -23,7 +23,6 @@ Opens local port: `8000`
 Builds from the php-fpm folder.<br>
 Mounts the folder magento2 from the project main folder into the container volume `/home/magento`.<br>
 This container includes all dependencies for magento 2 (Also contain composer, node, grunt, code sniffer, xDebug etc.).<br>
-Opens local port: `9000`
 
 ### Container phpmyadmin:
 Creates a fully working phpmyadmin container.<br>
