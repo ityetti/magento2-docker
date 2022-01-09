@@ -58,9 +58,9 @@ ENV XDEBUG_IDKEY PHPSTORM
 RUN echo "" > /etc/php.d/xdebug.ini \
  && echo "[xdebug]" > /etc/php.d/xdebug.ini \
  && echo "zend_extension = /usr/lib64/php/modules/xdebug.so" > /etc/php.d/xdebug.ini \
- && echo "xdebug.remote_enable = 1" > /etc/php.d/xdebug.ini \
- && echo "xdebug.remote_autostart = 1" > /etc/php.d/xdebug.ini \
- && echo "xdebug.remote_host = host.docker.internal" > /etc/php.d/xdebug.ini
+ && echo "xdebug.remote_enable = 1" >> /etc/php.d/xdebug.ini \
+ && echo "xdebug.remote_autostart = 1" >> /etc/php.d/xdebug.ini \
+ && echo "xdebug.remote_host = host.docker.internal" >> /etc/php.d/xdebug.ini
 
 # Add zip to PHP
 RUN yum -y install php-pecl-zip
