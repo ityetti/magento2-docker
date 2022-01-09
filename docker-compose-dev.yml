@@ -3,10 +3,10 @@ version: '2'
 services:
   nginx:
     volumes:
-      - magento2:/home/magento:default
+      - magento2:/home/magento:cached
   php-fpm:
     volumes:
-      - magento2:/home/magento:default
+      - magento2:/home/magento:cached
 
 volumes:
   magento2:
