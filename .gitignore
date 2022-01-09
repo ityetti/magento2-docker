@@ -4,3 +4,5 @@
 .idea
 # Ignore Magento files
 magento2
+# Ignore Magento files
+.docker-sync
