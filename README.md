@@ -104,3 +104,4 @@ First way will run in the foreground, second way will run in the background
 ## Feature Updates
 - v1.0.0 - Stable release
 - v1.0.1 - Updated to PHP 7.4.x, added docker-sync for MacOS users
+- v1.0.2 - Fix xDebug, add rabbitmq management, fix email sending
