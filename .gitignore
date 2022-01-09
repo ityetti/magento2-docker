@@ -2,3 +2,5 @@
 .DS_Store
 # Ignore PHPStorm folder
 .idea
+# Ignore Magento files
+magento2
