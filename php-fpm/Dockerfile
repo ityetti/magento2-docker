@@ -65,6 +65,13 @@ RUN echo "" > /etc/php.d/xdebug.ini \
 # Add zip to PHP
 RUN yum -y install php-pecl-zip
 
+# Add mailhog configuration for PHP
+RUN rm -rf /var/lib/apt/lists/*
+RUN curl -Lsf 'https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz' | tar -C '/usr/local' -xvzf -
+ENV PATH /usr/local/go/bin:$PATH
+RUN go get github.com/mailhog/mhsendmail
+RUN cp /root/go/bin/mhsendmail /usr/bin/mhsendmail
+
 # Add config
 RUN mkdir -p /var/run/php-fpm
 ADD www.conf /etc/php-fpm.d/www.conf
