@@ -2,14 +2,13 @@
 
 #  Magento 2 Docker to Development
 
-### CentOS 7 + Nginx (1.8) + Redis (6.0) + PHP-FPM (7.4) + MySQL (8.0.27) + PHPMyAdmin + XDebug (2.9.8) + Node (12.x) + Grunt + Mailhog + RabbitMQ (3.8.26) + Elasticsearch (7.9.3)
+### CentOS 7 + Nginx (1.8) + Redis (6.2) + PHP-FPM (8.1) + MySQL (8.0.27) + XDebug (3.1.4) + Node (12.x) + Grunt + Mailhog + RabbitMQ (3.9) + Elasticsearch (7.16.3)
 
 The docker stack is composed of the following containers
 - redis
 - rabbitmq
 - elasticsearch
 - mailhog
-- phpmyadmin
 - php-fpm
 - nginx
 - mysql
@@ -23,12 +22,6 @@ Opens local port: `8000`
 Builds from the php-fpm folder.<br>
 Mounts the folder magento2 from the project main folder into the container volume `/home/magento`.<br>
 This container includes all dependencies for magento 2 (Also contain composer, node, grunt, code sniffer, xDebug etc.).<br>
-
-### Container phpmyadmin:
-Creates a fully working phpmyadmin container.<br>
-Opens up port: `8080`
-        
-    To access phpmyadmin http://localhost:8080 or http://ip_of_the_docker_server:8080
 
 ### Container redis:
 Starts a redis container.<br>
@@ -90,18 +83,12 @@ To access your web server's command line, run the following commands on your CLI
 
 To access the magento homepage, go to the following url: http://localhost:8000 or http://ip_of_the_docker_server:8000
 
-## Use docker-sync
-#### Install docker-sync tool:
-    gem install --user-install docker-sync
-#### Start the docker-sync stack:
-    docker-sync-stack start
-OR
-
-    docker-sync start
-    docker-compose -f docker-compose.yml -f docker-compose-dev.yml up -d
-First way will run in the foreground, second way will run in the background
-
 ## Feature Updates
 - v1.0.0 - Stable release
 - v1.0.1 - Updated to PHP 7.4.x, added docker-sync for MacOS users
 - v1.0.2 - Fix xDebug, add rabbitmq management, fix email sending
+
+## Branches
+- master (for magento 2.3.7 and higher)
+- php72 (for magento 2.3.0 and higher)
+- php81 (for magento 2.4.4 and higher)
