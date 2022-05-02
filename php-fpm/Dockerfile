@@ -14,7 +14,7 @@ RUN yum clean all \
 RUN yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
 RUN yum -y install yum-utils
 RUN yum-config-manager --disable 'remi-php*'
-RUN yum-config-manager --enable remi-php74
+RUN yum-config-manager --enable remi-php81
 RUN yum repolist
 RUN yum -y install php php-{zip,cli,fpm,mysqlnd,xml,pear,opcache,redis,memcache,dba,common,mcrypt,pdo,process,tidy,bcmath,ctype,curl,dom,fileinfo,gd,hash,iconv,intl,json,libxml,mbstring,openssl,pcre,pdo_mysql,simplexml,soap,sockets,sodium,xmlwriter,xsl,devel}
 RUN yum -y install wget
@@ -50,7 +50,7 @@ RUN yum install -y gcc-c++ make \
 RUN yum -y install make
 
 # Install xDebug
-RUN pecl install xdebug-2.9.8
+RUN pecl install xdebug-3.1.4
 
 # Add xDebug to PHP configuration
 ENV XDEBUG_PORT 9000
@@ -67,7 +67,7 @@ RUN yum -y install php-pecl-zip
 
 # Add mailhog configuration for PHP
 RUN rm -rf /var/lib/apt/lists/*
-RUN curl -Lsf 'https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz' | tar -C '/usr/local' -xvzf -
+RUN curl -Lsf 'https://storage.googleapis.com/golang/go1.9.linux-amd64.tar.gz' | tar -C '/usr/local' -xvzf -
 ENV PATH /usr/local/go/bin:$PATH
 RUN go get github.com/mailhog/mhsendmail
 RUN cp /root/go/bin/mhsendmail /usr/bin/mhsendmail

@@ -3,14 +3,11 @@ version: '2'
 services:
   nginx:
     build: ./nginx
-    container_name: nginx
+    container_name: ${PROJECT_NAME}-nginx
     ports:
       - "8000:80"
     volumes:
-      - ./magento2/app/code:/home/magento/app/code:cached
-      - ./magento2/app/design:/home/magento/app/design:cached
-      - ./magento2/var/log:/home/magento/var/log:cached
-      - ./magento2/var/report:/home/magento/var/report:cached
+      - ./magento2:/home/magento:cached
     depends_on:
       - mysql
       - redis
@@ -19,13 +16,11 @@ services:
       - magento
 
   php-fpm:
+    platform: linux/x86_64
     build: ./php-fpm
-    container_name: php-fpm
+    container_name: ${PROJECT_NAME}-php-fpm
     volumes:
-      - ./magento2/app/code:/home/magento/app/code:cached
-      - ./magento2/app/design:/home/magento/app/design:cached
-      - ./magento2/var/log:/home/magento/var/log:cached
-      - ./magento2/var/report:/home/magento/var/report:cached
+      - ./magento2:/home/magento:cached
       - ./php-fpm/php.ini:/etc/php.ini
     depends_on:
       - mysql
@@ -36,16 +31,17 @@ services:
       - magento
 
   redis:
-    image: redis:6.0
-    container_name: redis
+    image: redis:6.2
+    container_name: ${PROJECT_NAME}-redis
     ports:
       - "6379:6379"
     networks:
       - magento
 
   mysql:
+    platform: linux/x86_64
     image: mysql:8.0.27
-    container_name: mysql
+    container_name: ${PROJECT_NAME}-mysql
     volumes:
       - ./mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
     environment:
@@ -59,27 +55,10 @@ services:
     networks:
       - magento
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    environment:
-      - PMA_ARBITRARY=1
-    restart: always
-    ports:
-      - "8080:80"
-    volumes:
-      - /sessions
-    external_links:
-      - mysql
-    depends_on:
-      - mysql
-      - redis
-    networks:
-      - magento
-
   mailhog:
+    platform: linux/x86_64
     image: mailhog/mailhog
-    container_name: mailhog
+    container_name: ${PROJECT_NAME}-mailhog
     ports:
       - "1025:1025"
       - "8025:8025"
@@ -87,8 +66,8 @@ services:
       - magento
 
   rabbitmq:
-    image: rabbitmq:3.8-management
-    container_name: rabbitmq
+    image: rabbitmq:3.9-management
+    container_name: ${PROJECT_NAME}-rabbitmq
     ports:
       - "15672:15672"
       - "5672:5672"
@@ -97,8 +76,8 @@ services:
       - magento
 
   elasticsearch:
-    image: elasticsearch:7.9.3
-    container_name: elasticsearch
+    image: elasticsearch:7.16.3
+    container_name: ${PROJECT_NAME}-elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"
