@@ -1,11 +1,23 @@
 version: '2'
 
 services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    container_name: ${PROJECT_NAME}-nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx/nginx-proxy.conf:/etc/nginx/nginx.conf
+    networks:
+      - magento
+    depends_on:
+      - nginx
+      - php-fpm
+
   nginx:
     build: ./nginx
     container_name: ${PROJECT_NAME}-nginx
-    ports:
-      - "8000:80"
     volumes:
       - ./magento2:/home/magento:cached
     depends_on:
@@ -14,6 +26,8 @@ services:
       - php-fpm
     networks:
       - magento
+    environment:
+      - VIRTUAL_HOST=${PROJECT_VIRTUAL_HOST}
 
   php-fpm:
     platform: linux/x86_64
@@ -59,21 +73,31 @@ services:
     platform: linux/x86_64
     image: mailhog/mailhog
     container_name: ${PROJECT_NAME}-mailhog
+    environment:
+      - VIRTUAL_HOST=mail.${PROJECT_VIRTUAL_HOST}
+      - VIRTUAL_PORT=8025
     ports:
       - "1025:1025"
       - "8025:8025"
     networks:
       - magento
+    expose:
+      - 8025
 
   rabbitmq:
     image: rabbitmq:3.9-management
     container_name: ${PROJECT_NAME}-rabbitmq
+    environment:
+      - VIRTUAL_HOST=rabbit.${PROJECT_VIRTUAL_HOST}
+      - VIRTUAL_PORT=15672
     ports:
       - "15672:15672"
       - "5672:5672"
     restart: always
     networks:
       - magento
+    expose:
+      - 15672
 
   elasticsearch:
     image: elasticsearch:7.16.3
@@ -88,6 +112,10 @@ services:
       - "discovery.type=single-node"
       ## Set custom heap size to avoid memory errors
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - VIRTUAL_HOST=elastic.${PROJECT_VIRTUAL_HOST}
+      - VIRTUAL_PORT=9200
+    expose:
+      - 9200
 
 networks:
   magento:
