@@ -12,11 +12,15 @@ The docker stack is composed of the following containers
 - php-fpm
 - nginx
 - mysql
+- nginx-proxy
 
 ### Container nginx
 Builds from the nginx folder. <br>
 Mounts the folder magento2 from the project main folder into the container volume `/home/magento`.<br>
-Opens local port: `8000`
+
+### Container nginx-proxy
+Starts a nginx-proxy container for use VIRTUAL_HOST.<br>
+Opens local port: `80`
 
 ### Container php-fpm
 Builds from the php-fpm folder.<br>
@@ -61,27 +65,37 @@ Starts a elasticsearch container.<br>
 Opens up port: `9200` and `9300`
 
 ## Setup
-To start/build the stack.
+Edit your `.env` file in root folder, change `PROJECT_NAME` and `PROJECT_VIRTUAL_HOST`:<br>
+`PROJECT_NAME` - help you to create simple and clear container names.<br>
+`PROJECT_VIRTUAL_HOST` - it is your main url address.<br>
+For example:
 
-Use - `docker-compose up` or `docker-compose up -d` to run the container on detached mode. 
+    PROJECT_NAME=magento2
+    PROJECT_VIRTUAL_HOST=magento2.test
 
-Compose will take some time to execute.
+Edit your `/etc/hosts` and add next line:<br>
+`127.0.0.1 magento2.test mail.magento2.test elastic.magento2.test rabbit.magento2.test`<br>
 
+To start/build the stack.<br>
+Use - `docker-compose up` or `docker-compose up -d` to run the container on detached mode.<br>
+Compose will take some time to execute.<br>
 After the build has finished you can press the ctrl+c and docker-compose stop all containers.
 
 ## Installing Magento
+You will check the latest version of Magento from link: https://magento.com/tech-resources/download <br>
+To the run installation process use next commands.
 
-You will need to download the latest version of Magento from link: https://magento.com/tech-resources/download
+    ./scripts/composer create-project --repository-url=https://repo.magento.com/magento/project-community-edition=2.4.4 /home/magento bash
 
-Make sure you put the install under the `magento2` folder. 
-
-To access your web server's command line, run the following commands on your CLI.
-
-    docker exec -it <web-servers-container-name> bash
+    ./scripts/composer install bash
 
 ## Setting up Magento
+To access the magento homepage, go to the following url: http://magento2.test<br>
 
-To access the magento homepage, go to the following url: http://localhost:8000 or http://ip_of_the_docker_server:8000
+Also, you can open:<br>
+http://mail.magento2.test - **Mailhog**<br>
+http://elastic.magento2.test - **Elasicsearch**<br>
+http://rabbit.magento2.test - **RabbitMQ** (guest/guest for aceess)<br>
 
 ## Feature Updates
 - v1.0.0 - Stable release
