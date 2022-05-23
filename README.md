@@ -83,11 +83,13 @@ After the build has finished you can press the ctrl+c and docker-compose stop al
 
 ## Installing Magento
 You will check the latest version of Magento from link: https://magento.com/tech-resources/download <br>
-To the run installation process use next commands.
+To the run installation process use next commands.<br>
+Create new project:
 
-    ./scripts/composer create-project --repository-url=https://repo.magento.com/magento/project-community-edition=2.4.4 /home/magento bash
+    ./scripts/composer create-project --repository-url=https://repo.magento.com/magento/project-community-edition=2.4.4 /home/magento
+Install project:
 
-    ./scripts/composer install bash
+    ./scripts/composer install
 
 ## Setting up Magento
 To access the magento homepage, go to the following url: http://magento2.test<br>
