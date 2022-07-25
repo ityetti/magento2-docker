@@ -43,6 +43,8 @@ services:
       - elasticsearch
     networks:
       - magento
+    environment:
+      PHP_IDE_CONFIG: "serverName=Docker"
 
   redis:
     image: redis:6.2
