@@ -105,6 +105,4 @@ http://rabbit.magento2.test - **RabbitMQ** (guest/guest for aceess)<br>
 - v1.0.2 - Fix xDebug, add rabbitmq management, fix email sending
 
 ## Branches
-- master (for magento 2.3.7 and higher)
-- php72 (for magento 2.3.0 and higher)
-- php81 (for magento 2.4.4 and higher)
+- master (for magento 2.4.4 and higher)
