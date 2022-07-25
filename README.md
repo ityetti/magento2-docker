@@ -103,6 +103,7 @@ http://rabbit.magento2.test - **RabbitMQ** (guest/guest for aceess)<br>
 - v1.0.0 - Stable release
 - v1.0.1 - Updated to PHP 7.4.x, added docker-sync for MacOS users
 - v1.0.2 - Fix xDebug, add rabbitmq management, fix email sending
+- v1.0.3 - Updated to PHP 8.1.x
 
 ## Branches
 - master (for magento 2.4.4 and higher)
