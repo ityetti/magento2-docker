@@ -2,7 +2,7 @@
 
 #  Magento 2 Docker to Development (For Apple Silicon)
 
-### Nginx (1.8) + Redis (6.2) + PHP-FPM (8.1) + MySQL (8.0.27) + XDebug (3.1.4) + Node (12.x) + Grunt + Mailhog + RabbitMQ (3.9) + Elasticsearch (7.16.3)
+### Nginx (1.8) + Redis (6.2) + PHP-FPM (8.1) + MySQL (8.0.27) + XDebug (3.1.4) + Mailhog + RabbitMQ (3.9) + Elasticsearch (7.16.3)
 
 The docker stack is composed of the following containers
 - redis
@@ -25,7 +25,7 @@ Opens local port: `80`
 ### Container php-fpm
 Builds from the php-fpm folder.<br>
 Mounts the folder magento2 from the project main folder into the container volume `/home/magento`.<br>
-This container includes all dependencies for magento 2 (Also contain composer, node, grunt, code sniffer, xDebug etc.).<br>
+This container includes all dependencies for magento 2 (Also contain composer, code sniffer, xDebug etc.).<br>
 
 ### Container redis:
 Starts a redis container.<br>
