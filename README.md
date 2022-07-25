@@ -2,7 +2,7 @@
 
 #  Magento 2 Docker to Development
 
-### CentOS 7 + Nginx (1.8) + Redis (6.2) + PHP-FPM (8.1) + MySQL (8.0.27) + XDebug (3.1.4) + Node (12.x) + Grunt + Mailhog + RabbitMQ (3.9) + Elasticsearch (7.16.3)
+### Nginx (1.8) + Redis (6.2) + PHP-FPM (8.1) + MySQL (8.0.27) + XDebug (3.1.4) + Node (12.x) + Grunt + Mailhog + RabbitMQ (3.9) + Elasticsearch (7.16.3)
 
 The docker stack is composed of the following containers
 - redis
