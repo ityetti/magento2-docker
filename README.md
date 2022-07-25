@@ -1,6 +1,6 @@
 ![Magento 2](https://cdn.rawgit.com/rafaelstz/magento2-snippets-visualstudio/master/images/icon.png)
 
-#  Magento 2 Docker to Development
+#  Magento 2 Docker to Development (For Apple Silicon)
 
 ### Nginx (1.8) + Redis (6.2) + PHP-FPM (8.1) + MySQL (8.0.27) + XDebug (3.1.4) + Node (12.x) + Grunt + Mailhog + RabbitMQ (3.9) + Elasticsearch (7.16.3)
 
