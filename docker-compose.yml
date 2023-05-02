@@ -16,6 +16,7 @@ services:
       - php-fpm
 
   nginx:
+    platform: linux/x86_64
     build: ./nginx
     container_name: ${PROJECT_NAME}-nginx
     volumes:
@@ -44,6 +45,7 @@ services:
     networks:
       - magento
     environment:
+      XDEBUG_CONFIG: "client_host=host.docker.internal"
       PHP_IDE_CONFIG: "serverName=Docker"
 
   redis:
