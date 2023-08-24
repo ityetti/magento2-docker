@@ -117,6 +117,7 @@ http://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 - v1.0.3 - Updated to PHP 8.1.x
 - v1.0.4 - Fix xDebug for stable work
 - v1.0.5 - Replace Elasticsearch to OpenSearch, upgrade component versions, added varnish
+- v1.0.6 - Fix xDebug for correct stopping at point
 
 ## Branches
 - master (for magento 2.4.6 and higher)
