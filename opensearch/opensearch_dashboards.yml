@@ -1,0 +1,7 @@
+server.host: '0.0.0.0'
+server.port: 5601
+opensearch.hosts: [http://localhost:9200]
+opensearch.ssl.verificationMode: none
+opensearch.username: magento
+opensearch.password: magento
+opensearch.requestHeadersWhitelist: [authorization, securitytenant]

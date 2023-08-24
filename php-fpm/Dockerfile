@@ -10,7 +10,7 @@ RUN if [ $(uname -m) = "x86_64" ]; then mailhog_arch="amd64"; else mailhog_arch=
     && go get . \
     && GOOS=linux GOARCH=${mailhog_arch} go build -o mhsendmail .
 
-FROM php:8.1-fpm
+FROM arm64v8/php:8.2-fpm as php
 
 ARG MAGENTO_ROOT=/home/magento
 
@@ -99,7 +99,7 @@ RUN pecl install -o -f \
   pcov \
   raphf \
   redis \
-  xdebug-3.1.5 \
+  xdebug-3.2.2 \
   xmlrpc-1.0.0RC3 \
   yaml
 

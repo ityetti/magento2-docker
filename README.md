@@ -2,17 +2,19 @@
 
 #  Magento 2 Docker to Development (For Apple Silicon)
 
-### Nginx (1.8) + Redis (6.2) + PHP-FPM (8.1) + MySQL (8.0.27) + XDebug (3.1.5) + Mailhog + RabbitMQ (3.9) + Elasticsearch (7.16.3)
+### Nginx (1.22) + Redis (7.0) + PHP-FPM (8.2) + MySQL (8.0.34) + XDebug (3.2.2) + Mailhog + RabbitMQ (3.11) + OpenSearch (2.5.0) + Varnish (7.3)
 
 The docker stack is composed of the following containers
 - redis
 - rabbitmq
-- elasticsearch
+- opensearch
+- opensearch dashboard
 - mailhog
 - php-fpm
 - nginx
 - mysql
 - nginx-proxy
+- varnish
 
 ### Container nginx
 Builds from the nginx folder. <br>
@@ -60,9 +62,17 @@ Opens up port: `1025` and `8025`
 Starts a rabbitmq container.<br>
 Opens up port: `5672` and `15672`
 
-### Container elasticsearch:
-Starts a elasticsearch container.<br>
-Opens up port: `9200` and `9300`
+### Container opensearch:
+Starts an opensearch container.<br>
+Opens up port: `9200` and `9600`
+
+### Container opensearch-dashboard:
+Starts an opensearch dashboard container.<br>
+Opens up port: `5601`
+
+### Container varnish:
+Starts a varnish container.<br>
+Opens up port: `6082`
 
 ## Setup
 Edit your `.env` file in root folder, change `PROJECT_NAME` and `PROJECT_VIRTUAL_HOST`:<br>
@@ -74,7 +84,7 @@ For example:
     PROJECT_VIRTUAL_HOST=magento2.test
 
 Edit your `/etc/hosts` and add next line:<br>
-`127.0.0.1 magento2.test mail.magento2.test elastic.magento2.test rabbit.magento2.test`<br>
+`127.0.0.1 magento2.test mail.magento2.test search.magento2.test dashboard.magento2.test rabbit.magento2.test`<br>
 
 To start/build the stack.<br>
 Use - `docker-compose up` or `docker-compose up -d` to run the container on detached mode.<br>
@@ -86,18 +96,19 @@ You will check the latest version of Magento from link: https://magento.com/tech
 To the run installation process use next commands.<br>
 Create new project:
 
-    ./scripts/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.4 /home/magento
+    ./scripts/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.6-p2 /home/magento
 Install project:
 
-    ./scripts/magento setup:install --base-url=http://magento2.test/ --db-host=mysql --db-name=magento_db --db-user=magento_user --db-password="PASSWD#" --admin-firstname=admin --admin-lastname=admin --admin-email=admin@admin.test --admin-user=admin --admin-password=admin1! --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1 --elasticsearch-host=elasticsearch --elasticsearch-port=9200
+    ./scripts/magento setup:install --base-url=http://magento2.test/ --db-host=mysql --db-name=magento_db --db-user=magento_user --db-password="PASSWD#" --admin-firstname=admin --admin-lastname=admin --admin-email=admin@admin.test --admin-user=admin --admin-password=admin1! --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1 --opensearch-host=opensearch --opensearch-port=9200
 
 ## Setting up Magento
 To access the magento homepage, go to the following url: http://magento2.test<br>
 
 Also, you can open:<br>
 http://mail.magento2.test - **Mailhog**<br>
-http://elastic.magento2.test - **Elasicsearch**<br>
-http://rabbit.magento2.test - **RabbitMQ** (guest/guest for aceess)<br>
+http://search.magento2.test - **OpenSearch**<br>
+http://dashboard.magento2.test - **OpenSearch Dashboard**<br>
+http://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 
 ## Feature Updates
 - v1.0.0 - Stable release
@@ -105,6 +116,7 @@ http://rabbit.magento2.test - **RabbitMQ** (guest/guest for aceess)<br>
 - v1.0.2 - Fix xDebug, add rabbitmq management, fix email sending
 - v1.0.3 - Updated to PHP 8.1.x
 - v1.0.4 - Fix xDebug for stable work
+- v1.0.5 - Replace Elasticsearch to OpenSearch, upgrade component versions, added varnish
 
 ## Branches
-- master (for magento 2.4.4 and higher)
+- master (for magento 2.4.6 and higher)
