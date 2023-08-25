@@ -47,7 +47,7 @@ services:
 
 
   redis:
-    image: arm64v8/redis:7.0
+    image: arm64v8/redis:6.2
     container_name: ${PROJECT_NAME}-redis
     ports:
       - "6379:6379"
@@ -86,7 +86,7 @@ services:
       - 8025
 
   rabbitmq:
-    image: arm64v8/rabbitmq:3.11-management
+    image: arm64v8/rabbitmq:3.9-management
     container_name: ${PROJECT_NAME}-rabbitmq
     environment:
       - VIRTUAL_HOST=rabbit.${PROJECT_VIRTUAL_HOST}
@@ -101,7 +101,7 @@ services:
       - 15672
 
   opensearch:
-    image: opensearchproject/opensearch:2.5.0
+    image: opensearchproject/opensearch:1.2.4
     container_name: ${PROJECT_NAME}-opensearch
     ports:
       - "9200:9200"
@@ -126,7 +126,7 @@ services:
         hard: 65536
 
   opensearch-dashboard:
-    image: opensearchproject/opensearch-dashboards:2.5.0
+    image: opensearchproject/opensearch-dashboards:1.2.0
     container_name: ${PROJECT_NAME}-opensearch-dashboard
     restart: always
     networks:
@@ -151,7 +151,7 @@ services:
         hard: 65536
 
   varnish:
-    image: arm64v8/varnish:7.3
+    image: arm64v8/varnish:7.0
     container_name: ${PROJECT_NAME}-varnish
     restart: always
     networks:
