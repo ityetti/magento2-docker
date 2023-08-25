@@ -121,3 +121,4 @@ http://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 
 ## Branches
 - master (for magento 2.4.6 and higher)
+- m244 (for magento 2.4.4 and higher till 2.4.6)
