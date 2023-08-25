@@ -45,7 +45,6 @@ services:
       PHP_IDE_CONFIG: "serverName=Docker"
       XDEBUG_CONFIG: "client_host=host.docker.internal"
 
-
   redis:
     image: arm64v8/redis:6.2
     container_name: ${PROJECT_NAME}-redis

@@ -96,10 +96,10 @@ You will check the latest version of Magento from link: https://magento.com/tech
 To the run installation process use next commands.<br>
 Create new project:
 
-    ./scripts/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.6-p2 /home/magento
+    ./scripts/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.4 /home/magento
 Install project:
 
-    ./scripts/magento setup:install --base-url=http://magento2.test/ --db-host=mysql --db-name=magento_db --db-user=magento_user --db-password="PASSWD#" --admin-firstname=admin --admin-lastname=admin --admin-email=admin@admin.test --admin-user=admin --admin-password=admin1! --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1 --opensearch-host=opensearch --opensearch-port=9200
+    ./scripts/magento setup:install --base-url=http://magento2.test/ --db-host=mysql --db-name=magento_db --db-user=magento_user --db-password="PASSWD#" --admin-firstname=admin --admin-lastname=admin --admin-email=admin@admin.test --admin-user=admin --admin-password=admin1! --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1 --search-engine=elasticsearch7 --elasticsearch-host=opensearch --elasticsearch-port=9200
 
 ## Setting up Magento
 To access the magento homepage, go to the following url: http://magento2.test<br>
