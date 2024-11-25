@@ -19,3 +19,4 @@ symbolic-links=0
 
 # Magento Settings #
 auto_increment_increment=3
+log_bin_trust_function_creators=1
