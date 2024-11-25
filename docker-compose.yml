@@ -1,15 +1,36 @@
-version: '2'
-
 services:
-  nginx-proxy:
-    image: nginxproxy/nginx-proxy
-    container_name: ${PROJECT_NAME}-nginx-proxy
-    restart: always
+  reverse-proxy:
+    container_name: ${PROJECT_NAME}-traefik
+    image: arm64v8/traefik:3.2
+    command:
+      - "--api.insecure=false"
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--log.level=DEBUG"
+      - "--providers.docker.exposedByDefault=false"
+      - "--providers.docker.network=magento"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.https.address=:443"
+      - "--entrypoints.http.http.redirections.entrypoint.to=https"
+      - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.https.http.tls.certResolver=le"
+      - "--certificatesresolvers.le.acme.tlschallenge=true"
+      - "--certificatesresolvers.le.acme.email=admin@${PROJECT_VIRTUAL_HOST}"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.${PROJECT_VIRTUAL_HOST}`)"
+      - "traefik.http.routers.dashboard.entrypoints=https"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=traefik:$$apr1$$gNa7n0/R$$XOc09tOvpfv0FBWZ07upA1"
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx/nginx-proxy.conf:/etc/nginx/nginx.conf
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./letsencrypt:/letsencrypt
     networks:
       - magento
 
@@ -19,14 +40,11 @@ services:
     volumes:
       - ./magento2:/home/magento:cached
     depends_on:
-      - mysql
-      - redis
       - php-fpm
-      - nginx-proxy
     networks:
       - magento
-    environment:
-      - VIRTUAL_HOST=${PROJECT_VIRTUAL_HOST}
+    labels:
+      - "traefik.enable=false"
 
   php-fpm:
     build: ./php-fpm
@@ -34,21 +52,21 @@ services:
     volumes:
       - ./magento2:/home/magento:cached
       - ./php-fpm/php.ini:/etc/php.ini
-    depends_on:
-      - mysql
-      - redis
-      - rabbitmq
-      - opensearch
     networks:
       - magento
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
     environment:
       PHP_IDE_CONFIG: "serverName=Docker"
       XDEBUG_CONFIG: "client_host=host.docker.internal"
 
-
   redis:
     image: arm64v8/redis:7.0
     container_name: ${PROJECT_NAME}-redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
     ports:
       - "6379:6379"
     networks:
@@ -57,6 +75,9 @@ services:
   mysql:
     image: arm64v8/mysql:8.0.34
     container_name: ${PROJECT_NAME}-mysql
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
     volumes:
       - ./mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
     environment:
@@ -74,39 +95,47 @@ services:
     platform: linux/x86_64
     image: mailhog/mailhog
     container_name: ${PROJECT_NAME}-mailhog
-    environment:
-      - VIRTUAL_HOST=mail.${PROJECT_VIRTUAL_HOST}
-      - VIRTUAL_PORT=8025
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
+      - "traefik.http.routers.mailhog.rule=Host(`mail.${PROJECT_VIRTUAL_HOST}`)"
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
     ports:
       - "1025:1025"
       - "8025:8025"
     networks:
       - magento
     expose:
-      - 8025
+      - "8025"
 
   rabbitmq:
     image: arm64v8/rabbitmq:3.11-management
     container_name: ${PROJECT_NAME}-rabbitmq
-    environment:
-      - VIRTUAL_HOST=rabbit.${PROJECT_VIRTUAL_HOST}
-      - VIRTUAL_PORT=15672
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
+      - "traefik.http.routers.rabbitmq.rule=Host(`rabbit.${PROJECT_VIRTUAL_HOST}`)"
+      - "traefik.http.routers.rabbitmq.middlewares=strip-docs"
+      - "traefik.http.middlewares.strip-docs.stripprefix.prefixes=/rmq"
+      - "traefik.http.services.rabbitmq.loadbalancer.server.port=15672"
     ports:
       - "15672:15672"
       - "5672:5672"
-    restart: always
     networks:
       - magento
     expose:
-      - 15672
+      - "15672"
 
   opensearch:
     image: opensearchproject/opensearch:2.5.0
     container_name: ${PROJECT_NAME}-opensearch
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
+      - "traefik.http.routers.search.rule=Host(`search.${PROJECT_VIRTUAL_HOST}`)"
     ports:
       - "9200:9200"
       - "9600:9600"
-    restart: always
     networks:
       - magento
     environment:
@@ -115,8 +144,6 @@ services:
       - "OPENSEARCH_JAVA_OPTS=-Xms2048m -Xmx2048m"
       - "http.host=0.0.0.0"
       - "DISABLE_SECURITY_PLUGIN=true"
-      - VIRTUAL_HOST=search.${PROJECT_VIRTUAL_HOST}
-      - VIRTUAL_PORT=9200
     ulimits:
       memlock:
         soft: -1
@@ -128,16 +155,19 @@ services:
   opensearch-dashboard:
     image: opensearchproject/opensearch-dashboards:2.5.0
     container_name: ${PROJECT_NAME}-opensearch-dashboard
-    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
+      - "traefik.http.services.kibana-svc.loadbalancer.server.port=5601"
+      - "traefik.domain=dashboard.${PROJECT_VIRTUAL_HOST}"
+      - "traefik.http.routers.kibana-rtr.service=kibana-svc"
+      - "traefik.http.routers.kibana-rtr.entrypoints=https"
+      - "traefik.http.routers.kibana-rtr.rule=Host(`dashboard.${PROJECT_VIRTUAL_HOST}`)"
     networks:
       - magento
     environment:
-      - VIRTUAL_HOST=dashboard.${PROJECT_VIRTUAL_HOST}
-      - VIRTUAL_PORT=5601
-      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
       - "OPENSEARCH_HOSTS=http://opensearch:9200"
-    volumes:
-      - ./opensearch/opensearch_dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
     ports:
       - "5601:5601"
     expose:
@@ -147,17 +177,22 @@ services:
         soft: -1
         hard: -1
       nofile:
-        soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        soft: 65536
         hard: 65536
 
   varnish:
-    image: arm64v8/varnish:7.3
+    build: ./varnish
     container_name: ${PROJECT_NAME}-varnish
-    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
+      - "traefik.http.routers.varnish.rule=Host(`${PROJECT_VIRTUAL_HOST}`)"
+      - "traefik.http.routers.varnish.entrypoints=https"
+      - "traefik.http.services.varnish.loadbalancer.server.port=6081"
     networks:
       - magento
     ports:
-      - "6082:6082"
+      - "6081:6081"
     depends_on:
       - nginx
     links:
@@ -166,6 +201,9 @@ services:
       - ./varnish/varnish.vcl:/etc/varnish/default.vcl
     environment:
       - CACHE_SIZE=1G
+    expose:
+      - "6081"
+    command: ["varnishd", "-F", "-a", ":6081", "-b", "nginx:80"]
 
 networks:
   magento:
