@@ -118,6 +118,7 @@ https://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 - v1.0.4 - Fix xDebug for stable work
 - v1.0.5 - Replace Elasticsearch to OpenSearch, upgrade component versions, added varnish
 - v1.0.6 - Fix xDebug for correct stopping at point
+- v1.0.7 - Add traefik, optimization for varnish, remove nginx-proxy
 
 ## Branches
 - master (for magento 2.4.6 and higher)
