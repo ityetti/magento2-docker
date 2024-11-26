@@ -83,7 +83,7 @@ For example:
     PROJECT_VIRTUAL_HOST=magento2.test
 
 Edit your `/etc/hosts` and add next line:<br>
-`127.0.0.1 magento2.test mail.magento2.test search.magento2.test dashboard.magento2.test rabbit.magento2.test`<br>
+`127.0.0.1 magento2.test traefik.magento2.test mail.magento2.test search.magento2.test dashboard.magento2.test rabbit.magento2.test`<br>
 
 To start/build the stack.<br>
 Use - `docker-compose up` or `docker-compose up -d` to run the container on detached mode.<br>
