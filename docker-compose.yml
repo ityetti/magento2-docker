@@ -91,20 +91,26 @@ services:
     networks:
       - magento
 
-  mailhog:
-    platform: linux/x86_64
-    image: mailhog/mailhog
-    container_name: ${PROJECT_NAME}-mailhog
+  mailpit:
+    image: axllent/mailpit
+    container_name: ${PROJECT_NAME}-mailpit
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=magento"
-      - "traefik.http.routers.mailhog.rule=Host(`mail.${PROJECT_VIRTUAL_HOST}`)"
-      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+      - "traefik.http.routers.mailpit.rule=Host(`mail.${PROJECT_VIRTUAL_HOST}`)"
+      - "traefik.http.services.mailpit.loadbalancer.server.port=8025"
+    volumes:
+      - ./data:/data
     ports:
       - "1025:1025"
       - "8025:8025"
     networks:
       - magento
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
     expose:
       - "8025"
 

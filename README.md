@@ -105,7 +105,7 @@ To access the magento homepage, go to the following url: https://magento2.test<b
 
 Also, you can open:<br>
 https://traefik.magento2.test - **Traefik Dashboard** (traefik/traefik123 for access)<br>
-https://mail.magento2.test - **Mailhog**<br>
+https://mail.magento2.test - **Mailpit**<br>
 https://search.magento2.test - **OpenSearch**<br>
 https://dashboard.magento2.test - **OpenSearch Dashboard**<br>
 https://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
