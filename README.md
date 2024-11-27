@@ -2,7 +2,7 @@
 
 #  Magento 2 Docker to Development (Apple Silicon)
 
-### Nginx (1.22) + Redis (7.0) + PHP-FPM (8.2) + MySQL (8.0.34) + XDebug (3.2.2) + Mailhog + RabbitMQ (3.11) + OpenSearch (2.5.0) + Varnish (7.3)
+### Nginx (1.22) + Redis (7.0) + PHP-FPM (8.2) + MySQL (8.0.34) + XDebug (3.2.2) + Mailpit + RabbitMQ (3.11) + OpenSearch (2.5.0) + Varnish (7.3)
 
 The docker stack is composed of the following containers
 - traefik
@@ -10,7 +10,7 @@ The docker stack is composed of the following containers
 - php-fpm
 - redis
 - mysql
-- mailhog
+- mailpit
 - rabbitmq
 - opensearch
 - opensearch-dashboard
@@ -53,8 +53,8 @@ Opens up port: `3306`
 
 Note: On your host, port 3306 might already be in use. So before running docker-compose.yml, under the docker-compose.yml's mysql section change the host's port number to something other than 3306, select any as long as that port is not already being used locally on your machine.
 
-### Container mailhog:
-Starts a mailhog container.<br>
+### Container mailpit:
+Starts a mailpit container.<br>
 Opens up port: `8025`
 
 ### Container rabbitmq:
