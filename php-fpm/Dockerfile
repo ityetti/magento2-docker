@@ -95,10 +95,14 @@ RUN wget -O composer-setup.php https://getcomposer.org/installer
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN chmod +x /usr/local/bin/composer
 
+# Install n98-magerun2
+RUN wget https://files.magerun.net/n98-magerun2.phar \
+    && chmod +x n98-magerun2.phar \
+    && mv n98-magerun2.phar /usr/local/bin/n98-magerun2
+
 COPY etc/php-fpm.ini /usr/local/etc/php/conf.d/magento.ini
 COPY etc/php-xdebug.ini /usr/local/etc/php/conf.d/xdebug-settings.ini
 COPY etc/php-pcov.ini /usr/local/etc/php/conf.d/pcov-settings.ini
-COPY etc/mail.ini /usr/local/etc/php/conf.d/mail.ini
 COPY etc/php-fpm.conf /usr/local/etc/
 COPY etc/php-gnupg.ini /usr/local/etc/php/conf.d/gnupg.ini
 
