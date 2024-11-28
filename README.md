@@ -2,7 +2,7 @@
 
 #  Magento 2 Docker to Development (Apple Silicon)
 
-### Nginx (1.22) + Redis (7.0) + PHP-FPM (8.2) + MySQL (8.0.34) + XDebug (3.2.2) + Mailpit + RabbitMQ (3.11) + OpenSearch (2.5.0) + Varnish (7.3)
+### Traefik + Nginx + Redis + PHP-FPM + MySQL + XDebug + Mailpit + RabbitMQ + OpenSearch + Varnish
 
 The docker stack is composed of the following containers
 - traefik
@@ -119,6 +119,8 @@ https://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 - v1.0.5 - Replace Elasticsearch to OpenSearch, upgrade component versions, added varnish
 - v1.0.6 - Fix xDebug for correct stopping at point
 - v1.0.7 - Add traefik, optimization for varnish, remove nginx-proxy
+- v1.0.8 - Replace mailhog to mailpit
+- v1.0.9 - Add n98-magerun2
 
 ## Branches
 - master (for magento 2.4.6 and higher)
