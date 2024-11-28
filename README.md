@@ -1,37 +1,36 @@
 ![Magento 2](https://cdn.rawgit.com/rafaelstz/magento2-snippets-visualstudio/master/images/icon.png)
 
-#  Magento 2 Docker to Development (For Apple Silicon)
+#  Magento 2 Docker to Development (Apple Silicon)
 
-### Nginx (1.22) + Redis (7.0) + PHP-FPM (8.2) + MySQL (8.0.34) + XDebug (3.2.2) + Mailhog + RabbitMQ (3.11) + OpenSearch (2.5.0) + Varnish (7.3)
+### Nginx + Redis + PHP-FPM + MySQL + XDebug + Mailpit + RabbitMQ + OpenSearch + Varnish
 
 The docker stack is composed of the following containers
+- traefik
+- nginx
+- php-fpm
 - redis
+- mysql
+- mailpit
 - rabbitmq
 - opensearch
-- opensearch dashboard
-- mailhog
-- php-fpm
-- nginx
-- mysql
-- nginx-proxy
+- opensearch-dashboard
 - varnish
+
+### Container traefik
+Starts a reverse proxy and load balancer for project<br>
+Opens local port: `80`, `443`
 
 ### Container nginx
 Builds from the nginx folder. <br>
 Mounts the folder magento2 from the project main folder into the container volume `/home/magento`.<br>
 
-### Container nginx-proxy
-Starts a nginx-proxy container for use VIRTUAL_HOST.<br>
-Opens local port: `80`
-
 ### Container php-fpm
 Builds from the php-fpm folder.<br>
 Mounts the folder magento2 from the project main folder into the container volume `/home/magento`.<br>
-This container includes all dependencies for magento 2 (Also contain composer, code sniffer, xDebug etc.).<br>
+This container includes all dependencies for Magento 2 (Also contain composer, code sniffer, xDebug etc.).<br>
 
 ### Container redis:
 Starts a redis container.<br>
-Opens up port: `6379`
 
 ### Container mysql:
 Please change or set the mysql environment variables
@@ -54,25 +53,25 @@ Opens up port: `3306`
 
 Note: On your host, port 3306 might already be in use. So before running docker-compose.yml, under the docker-compose.yml's mysql section change the host's port number to something other than 3306, select any as long as that port is not already being used locally on your machine.
 
-### Container mailhog:
-Starts a mailhog container.<br>
-Opens up port: `1025` and `8025`
+### Container mailpit:
+Starts a mailpit container.<br>
+Opens up port: `8025`
 
 ### Container rabbitmq:
 Starts a rabbitmq container.<br>
-Opens up port: `5672` and `15672`
+Opens up port: `15672`
 
 ### Container opensearch:
 Starts an opensearch container.<br>
-Opens up port: `9200` and `9600`
 
 ### Container opensearch-dashboard:
 Starts an opensearch dashboard container.<br>
 Opens up port: `5601`
 
 ### Container varnish:
+Builds from the varnish folder.
 Starts a varnish container.<br>
-Opens up port: `6082`
+Opens up port: `6081`
 
 ## Setup
 Edit your `.env` file in root folder, change `PROJECT_NAME` and `PROJECT_VIRTUAL_HOST`:<br>
@@ -84,7 +83,7 @@ For example:
     PROJECT_VIRTUAL_HOST=magento2.test
 
 Edit your `/etc/hosts` and add next line:<br>
-`127.0.0.1 magento2.test mail.magento2.test search.magento2.test dashboard.magento2.test rabbit.magento2.test`<br>
+`127.0.0.1 magento2.test traefik.magento2.test mail.magento2.test search.magento2.test dashboard.magento2.test rabbit.magento2.test`<br>
 
 To start/build the stack.<br>
 Use - `docker-compose up` or `docker-compose up -d` to run the container on detached mode.<br>
@@ -96,19 +95,20 @@ You will check the latest version of Magento from link: https://magento.com/tech
 To the run installation process use next commands.<br>
 Create new project:
 
-    ./scripts/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.4 /home/magento
+    ./scripts/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.4-p11 /home/magento
 Install project:
 
-    ./scripts/magento setup:install --base-url=http://magento2.test/ --db-host=mysql --db-name=magento_db --db-user=magento_user --db-password="PASSWD#" --admin-firstname=admin --admin-lastname=admin --admin-email=admin@admin.test --admin-user=admin --admin-password=admin1! --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1 --search-engine=elasticsearch7 --elasticsearch-host=opensearch --elasticsearch-port=9200
+    ./scripts/magento setup:install --base-url=https://magento2.test/ --db-host=mysql --db-name=magento_db --db-user=magento_user --db-password="PASSWD#" --admin-firstname=admin --admin-lastname=admin --admin-email=admin@admin.test --admin-user=admin --admin-password=admin1! --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1 --opensearch-host=opensearch --opensearch-port=9200 --search-engine=opensearch
 
 ## Setting up Magento
-To access the magento homepage, go to the following url: http://magento2.test<br>
+To access the magento homepage, go to the following url: https://magento2.test<br>
 
 Also, you can open:<br>
-http://mail.magento2.test - **Mailhog**<br>
-http://search.magento2.test - **OpenSearch**<br>
-http://dashboard.magento2.test - **OpenSearch Dashboard**<br>
-http://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
+https://traefik.magento2.test - **Traefik Dashboard** (traefik/traefik123 for access)<br>
+https://mail.magento2.test - **Mailpit**<br>
+https://search.magento2.test - **OpenSearch**<br>
+https://dashboard.magento2.test - **OpenSearch Dashboard**<br>
+https://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 
 ## Feature Updates
 - v1.0.0 - Stable release
@@ -118,6 +118,7 @@ http://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 - v1.0.4 - Fix xDebug for stable work
 - v1.0.5 - Replace Elasticsearch to OpenSearch, upgrade component versions, added varnish
 - v1.0.6 - Fix xDebug for correct stopping at point
+- v1.0.7 - Add traefik, optimization for varnish, remove nginx-proxy
 
 ## Branches
 - master (for magento 2.4.6 and higher)
