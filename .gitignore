@@ -1,8 +1,7 @@
-# Ignore Mac DS_Store files
 .DS_Store
-# Ignore PHPStorm folder
 .idea
-# Ignore Magento files
 magento2
-# Ignore Magento files
 .docker-sync
+data
+letsencrypt
+.env

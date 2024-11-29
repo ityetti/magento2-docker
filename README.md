@@ -5,16 +5,20 @@
 ### Traefik + Nginx + Redis + PHP-FPM + MySQL + XDebug + Mailpit + RabbitMQ + OpenSearch + Varnish
 
 The docker stack is composed of the following containers
-- traefik
-- nginx
-- php-fpm
-- redis
-- mysql
-- mailpit
-- rabbitmq
-- opensearch
-- opensearch-dashboard
-- varnish
+
+| Name                 | Version |
+|----------------------|---------|
+| traefik              | 3.2     |
+| nginx                | 1.22    |
+| php-fpm              | 8.2     |
+| php-fpm-xdebug       | 3.2.2   |
+| redis                | 7.0     |
+| mysql                | 8.0.34  |
+| mailpit              | 1.21    |
+| rabbitmq             | 3.11    |
+| opensearch           | 2.5.0   |
+| opensearch-dashboard | 2.5.0   |
+| varnish              | 7.3     |
 
 ### Container traefik
 Starts a reverse proxy and load balancer for project<br>
@@ -27,7 +31,12 @@ Mounts the folder magento2 from the project main folder into the container volum
 ### Container php-fpm
 Builds from the php-fpm folder.<br>
 Mounts the folder magento2 from the project main folder into the container volume `/home/magento`.<br>
-This container includes all dependencies for Magento 2 (Also contain composer, code sniffer, xDebug etc.).<br>
+This container includes all dependencies for Magento 2.<br>
+
+### Container php-fpm-xdebug
+Builds from the php-fpm-xdebug folder.<br>
+Mounts the folder magento2 from the project main folder into the container volume `/home/magento`.<br>
+This container includes all dependencies for Magento 2 (also contain xDebug).<br>
 
 ### Container redis:
 Starts a redis container.<br>
@@ -74,9 +83,10 @@ Starts a varnish container.<br>
 Opens up port: `6081`
 
 ## Setup
-Edit your `.env` file in root folder, change `PROJECT_NAME` and `PROJECT_VIRTUAL_HOST`:<br>
+Copy your `.env.sample` to `.env` file in root folder, and change `PROJECT_NAME` and `PROJECT_VIRTUAL_HOST`:<br>
 `PROJECT_NAME` - help you to create simple and clear container names.<br>
 `PROJECT_VIRTUAL_HOST` - it is your main url address.<br>
+
 For example:
 
     PROJECT_NAME=magento2
@@ -96,12 +106,18 @@ To the run installation process use next commands.<br>
 Create new project:
 
     ./scripts/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.7-p3 /home/magento
-Install project:
+Install project (don't forget to change **--base-url** to yours):
 
     ./scripts/magento setup:install --base-url=https://magento2.test/ --db-host=mysql --db-name=magento_db --db-user=magento_user --db-password="PASSWD#" --admin-firstname=admin --admin-lastname=admin --admin-email=admin@admin.test --admin-user=admin --admin-password=admin1! --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1 --opensearch-host=opensearch --opensearch-port=9200 --search-engine=opensearch
 
 ## Setting up Magento
 To access the magento homepage, go to the following url: https://magento2.test<br>
+
+## How to use xDebug
+You could enable or disable xDebug with the next command: `./scripts/switch_mode [fpm|xdebug]`<br>
+`fpm` - Enable container without xDebug <br>
+`xdebug` - Enable container with xDebug <br>
+
 
 Also, you can open:<br>
 https://traefik.magento2.test - **Traefik Dashboard** (traefik/traefik123 for access)<br>
@@ -112,7 +128,7 @@ https://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 
 ## Feature Updates
 - v1.0.0 - Stable release
-- v1.0.1 - Updated to PHP 7.4.x, added docker-sync for MacOS users
+- v1.0.1 - Updated to PHP 7.4.x, added docker-sync for macOS users
 - v1.0.2 - Fix xDebug, add rabbitmq management, fix email sending
 - v1.0.3 - Updated to PHP 8.1.x
 - v1.0.4 - Fix xDebug for stable work
@@ -121,7 +137,11 @@ https://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 - v1.0.7 - Add traefik, optimization for varnish, remove nginx-proxy
 - v1.0.8 - Replace mailhog to mailpit
 - v1.0.9 - Add n98-magerun2
+- v1.1.0 - Add a switcher for PHP that enables or disables xDebug
 
 ## Branches
-- master (for magento 2.4.6 and higher)
-- m244 (for magento 2.4.4 and higher till 2.4.6)
+| Name                 | Magento versions                       |
+|----------------------|----------------------------------------|
+| master               | 2.4.6 and higher                       |
+| m244                 | 2.4.4 up to 2.4.6                      |
+| develop              | like master with untested improvements |

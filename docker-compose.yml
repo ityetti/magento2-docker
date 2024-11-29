@@ -39,8 +39,6 @@ services:
     container_name: ${PROJECT_NAME}-nginx
     volumes:
       - ./magento2:/home/magento:cached
-    depends_on:
-      - php-fpm
     networks:
       - magento
     labels:
@@ -57,9 +55,23 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=magento"
+
+  php-fpm-xdebug:
+    build: ./php-fpm-xdebug
+    container_name: ${PROJECT_NAME}-php-fpm-xdebug
+    volumes:
+      - ./magento2:/home/magento:cached
+      - ./php-fpm/php.ini:/etc/php.ini
+    networks:
+      - magento
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=magento"
     environment:
       PHP_IDE_CONFIG: "serverName=Docker"
       XDEBUG_CONFIG: "client_host=host.docker.internal"
+    profiles:
+      - xdebug
 
   redis:
     image: arm64v8/redis:7.0
@@ -92,7 +104,7 @@ services:
       - magento
 
   mailpit:
-    image: axllent/mailpit
+    image: axllent/mailpit:v1.21
     container_name: ${PROJECT_NAME}-mailpit
     labels:
       - "traefik.enable=true"
