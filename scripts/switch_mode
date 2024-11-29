@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+MODE=$1
+
+if [ "$MODE" == "fpm" ]; then
+  echo "Switching to php-fpm..."
+  docker compose stop php-fpm-xdebug
+  docker compose up -d php-fpm
+elif [ "$MODE" == "xdebug" ]; then
+  echo "Switching to php-fpm-xdebug..."
+  docker compose stop php-fpm
+  docker compose up -d php-fpm-xdebug
+else
+  echo "Usage: $0 [fpm|xdebug]"
+  exit 1
+fi

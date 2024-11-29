@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+docker-compose exec -T php-fpm /usr/local/bin/n98-magerun2 $*

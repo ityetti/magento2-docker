@@ -84,6 +84,7 @@ RUN pecl install -o -f \
   pcov \
   raphf \
   redis \
+  xdebug-3.1.5 \
   xmlrpc-1.0.0RC3 \
   yaml
 
@@ -100,6 +101,7 @@ RUN wget https://files.magerun.net/n98-magerun2.phar \
     && mv n98-magerun2.phar /usr/local/bin/n98-magerun2
 
 COPY etc/php-fpm.ini /usr/local/etc/php/conf.d/magento.ini
+COPY etc/php-xdebug.ini /usr/local/etc/php/conf.d/xdebug-settings.ini
 COPY etc/php-pcov.ini /usr/local/etc/php/conf.d/pcov-settings.ini
 COPY etc/php-fpm.conf /usr/local/etc/
 COPY etc/php-gnupg.ini /usr/local/etc/php/conf.d/gnupg.ini
