@@ -113,6 +113,84 @@ Install project (don't forget to change **--base-url** to yours):
 ## Setting up Magento
 To access the magento homepage, go to the following url: https://magento2.test<br>
 
+<details>
+
+<summary>Storing sessions and cache in redis.</summary>
+
+##### As reference, you could use `env.php.magento.sample`
+
+#### Setting up the configuration for sessions.
+
+```php
+   'session' => [
+        'save' => 'redis',
+        'redis' => [
+            'host' => 'redis',
+            'port' => '6379',
+            'password' => '',
+            'timeout' => '2.5',
+            'persistent_identifier' => '',
+            'database' => '2',
+            'compression_threshold' => '2048',
+            'compression_library' => 'gzip',
+            'log_level' => '1',
+            'max_concurrency' => '6',
+            'break_after_frontend' => '5',
+            'break_after_adminhtml' => '30',
+            'first_lifetime' => '600',
+            'bot_first_lifetime' => '60',
+            'bot_lifetime' => '7200',
+            'disable_locking' => '0',
+            'min_lifetime' => '60',
+            'max_lifetime' => '2592000'
+        ]
+    ]
+```
+
+#### Setting up the configuration for cache.
+
+```php
+'cache' => [
+        'frontend' => [
+            'default' => [
+                'id_prefix' => '777_',
+                'backend' => 'Cm_Cache_Backend_Redis',
+                'backend_options' => [
+                    'server' => 'redis',
+                    'database' => '0',
+                    'port' => '6379',
+                    'compress_data' => '1',
+                    'compress_tags' => '1'
+                ]
+            ],
+            'page_cache' => [
+                'id_prefix' => '777_',
+                'backend' => 'Cm_Cache_Backend_Redis',
+                'backend_options' => [
+                    'server' => 'redis',
+                    'port' => '6379',
+                    'database' => '1',
+                    'compress_data' => '0'
+                ]
+            ]
+        ],
+        'allow_parallel_generation' => false
+    ],
+```
+
+#### Don't forget to add `http_cache_hosts` to correct the varnish purge.
+
+```php
+'http_cache_hosts' => [
+        [
+            'host' => 'nginx',
+            'port' => '8080'
+        ]
+    ]
+```
+
+</details>
+
 ## How to use xDebug
 You could enable or disable xDebug with the next command: `./scripts/switch_mode [fpm|xdebug]`<br>
 `fpm` - Enable container without xDebug <br>
@@ -138,6 +216,7 @@ https://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 - v1.0.8 - Replace mailhog to mailpit
 - v1.0.9 - Add n98-magerun2
 - v1.1.0 - Add a switcher for PHP that enables or disables xDebug
+- v1.1.1 - Fixed to avoid the proxying cycle between varnish and nginx.
 
 ## Branches
 | Name                 | Magento versions                       |

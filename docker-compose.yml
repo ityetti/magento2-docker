@@ -43,6 +43,8 @@ services:
       - magento
     labels:
       - "traefik.enable=false"
+    expose:
+      - "8080"
 
   php-fpm:
     build: ./php-fpm
@@ -221,7 +223,7 @@ services:
       - CACHE_SIZE=1G
     expose:
       - "6081"
-    command: ["varnishd", "-F", "-a", ":6081", "-b", "nginx:80"]
+    command: ["varnishd", "-F", "-a", ":6081", "-b", "nginx:8080"]
 
 networks:
   magento:

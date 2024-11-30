@@ -1,5 +1,5 @@
 # VCL version 5.0 is not supported so it should be 4.0 even though actually used Varnish version is 6
-vcl 4.1;
+vcl 4.0;
 
 import std;
 # The minimal Varnish version is 6.0
@@ -7,7 +7,7 @@ import std;
 
 backend default {
     .host = "nginx";
-    .port = "80";
+    .port = "8080";
     .first_byte_timeout = 600s;
     .probe = {
         .url = "/pub/health_check.php";
@@ -19,14 +19,10 @@ backend default {
 }
 
 acl purge {
-    "localhost";
+    "nginx";
 }
 
 sub vcl_recv {
-    if (req.url ~ "^/pub/health_check.php$") {
-        return (hash);
-    }
-
     if (req.restarts > 0) {
         set req.hash_always_miss = true;
     }
@@ -134,7 +130,7 @@ sub vcl_hash {
     if (req.http.X-Forwarded-Proto) {
         hash_data(req.http.X-Forwarded-Proto);
     }
-    
+
 
     if (req.url ~ "/graphql") {
         call process_graphql_headers;
@@ -161,9 +157,6 @@ sub process_graphql_headers {
 }
 
 sub vcl_backend_response {
-    if (bereq.url ~ "^/pub/health_check.php$") {
-       set beresp.ttl = 10s;  # Швидке кешування сторінки здоров'я
-    }
 
     set beresp.grace = 3d;
 
