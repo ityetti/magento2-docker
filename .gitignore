@@ -5,3 +5,4 @@ magento2
 data
 letsencrypt
 .env
+mysql/db

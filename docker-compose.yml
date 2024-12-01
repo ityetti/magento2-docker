@@ -94,6 +94,7 @@ services:
       - "traefik.docker.network=magento"
     volumes:
       - ./mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ./mysql/db:/var/lib/mysql
     environment:
       MYSQL_DATABASE: 'magento_db'
       MYSQL_ROOT_PASSWORD: 'root_pass'
