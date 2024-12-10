@@ -19,4 +19,5 @@ fi
 
 echo "The container is used: $ACTIVE_CONTAINER"
 
+# Execution of the command
 docker-compose exec -e COMPOSER_MEMORY_LIMIT=-1 "$ACTIVE_CONTAINER" composer "$@"
