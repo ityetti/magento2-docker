@@ -1,3 +1,23 @@
 #!/usr/bin/env bash
 
-docker-compose exec -T php-fpm php $*
+# List of possible php containers
+CONTAINERS=("php-fpm" "php-fpm-xdebug")
+
+# Find the active container
+for CONTAINER in "${CONTAINERS[@]}"; do
+    if docker-compose ps --services --filter "status=running" | grep -q "^${CONTAINER}$"; then
+        ACTIVE_CONTAINER=$CONTAINER
+        break
+    fi
+done
+
+# Check if an active container is found
+if [ -z "$ACTIVE_CONTAINER" ]; then
+    echo "No container of ${CONTAINERS[*]} inactive."
+    exit 1
+fi
+
+echo "The container is used: $ACTIVE_CONTAINER"
+
+# Execution of the command
+docker-compose exec -T "$ACTIVE_CONTAINER" php "$@"
