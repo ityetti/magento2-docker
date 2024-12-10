@@ -19,4 +19,5 @@ fi
 
 echo "The container is used: $ACTIVE_CONTAINER"
 
+# Execution of the command
 docker-compose exec -T "$ACTIVE_CONTAINER" /home/magento/bin/magento "$@"
