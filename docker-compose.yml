@@ -76,7 +76,7 @@ services:
       - xdebug
 
   redis:
-    image: arm64v8/redis:7.0
+    image: arm64v8/redis:7.2
     container_name: ${PROJECT_NAME}-redis
     labels:
       - "traefik.enable=true"
@@ -87,7 +87,7 @@ services:
       - magento
 
   mysql:
-    image: arm64v8/mysql:8.0.34
+    image: arm64v8/mysql:8.0.41
     container_name: ${PROJECT_NAME}-mysql
     labels:
       - "traefik.enable=true"
@@ -130,7 +130,7 @@ services:
       - "8025"
 
   rabbitmq:
-    image: arm64v8/rabbitmq:3.11-management
+    image: arm64v8/rabbitmq:3.13-management
     container_name: ${PROJECT_NAME}-rabbitmq
     labels:
       - "traefik.enable=true"
@@ -148,7 +148,7 @@ services:
       - "15672"
 
   opensearch:
-    image: opensearchproject/opensearch:2.5.0
+    image: opensearchproject/opensearch:2.12.0
     container_name: ${PROJECT_NAME}-opensearch
     labels:
       - "traefik.enable=true"
@@ -174,7 +174,7 @@ services:
         hard: 65536
 
   opensearch-dashboard:
-    image: opensearchproject/opensearch-dashboards:2.5.0
+    image: opensearchproject/opensearch-dashboards:2.12.0
     container_name: ${PROJECT_NAME}-opensearch-dashboard
     labels:
       - "traefik.enable=true"

@@ -9,16 +9,16 @@ The docker stack is composed of the following containers
 | Name                 | Version |
 |----------------------|---------|
 | traefik              | 3.2     |
-| nginx                | 1.22    |
-| php-fpm              | 8.2     |
+| nginx                | 1.26    |
+| php-fpm              | 8.3     |
 | php-fpm-xdebug       | 3.2.2   |
-| redis                | 7.0     |
-| mysql                | 8.0.34  |
-| mailpit              | 1.21    |
-| rabbitmq             | 3.11    |
-| opensearch           | 2.5.0   |
-| opensearch-dashboard | 2.5.0   |
-| varnish              | 7.3     |
+| redis                | 7.2     |
+| mysql                | 8.0.41  |
+| mailpit              | 1.24    |
+| rabbitmq             | 3.13    |
+| opensearch           | 2.12.0  |
+| opensearch-dashboard | 2.12.0  |
+| varnish              | 7.6     |
 
 ### Container traefik
 Starts a reverse proxy and load balancer for project<br>
@@ -105,7 +105,7 @@ You will check the latest version of Magento from link: https://magento.com/tech
 To the run installation process use next commands.<br>
 Create new project:
 
-    ./scripts/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.7-p3 /home/magento
+    ./scripts/composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.7-p4 /home/magento
 Install project (don't forget to change **--base-url** to yours):
 
     ./scripts/magento setup:install --base-url=https://magento2.test/ --db-host=mysql --db-name=magento_db --db-user=magento_user --db-password="PASSWD#" --admin-firstname=admin --admin-lastname=admin --admin-email=admin@admin.test --admin-user=admin --admin-password=admin1! --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1 --opensearch-host=opensearch --opensearch-port=9200 --search-engine=opensearch
@@ -217,10 +217,12 @@ https://rabbit.magento2.test - **RabbitMQ** (guest/guest for access)<br>
 - v1.0.9 - Add n98-magerun2
 - v1.1.0 - Add a switcher for PHP that enables or disables xDebug
 - v1.1.1 - Fixed to avoid the proxying cycle between varnish and nginx.
+- v1.1.2 - Update image versions for compatibility.
 
 ## Branches
-| Name                 | Magento versions                       |
-|----------------------|----------------------------------------|
-| master               | 2.4.6 and higher                       |
-| m244                 | 2.4.4 up to 2.4.6                      |
-| develop              | like master with untested improvements |
+| Name    | Magento versions                       |
+|---------|----------------------------------------|
+| master  | 2.4.7 and higher                       |
+| m246    | 2.4.6 up to 2.4.7                      |
+| m244    | 2.4.4 up to 2.4.6                      |
+| develop | like master with untested improvements |

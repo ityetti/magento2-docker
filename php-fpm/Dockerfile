@@ -1,4 +1,4 @@
-FROM arm64v8/php:8.2-fpm as php
+FROM arm64v8/php:8.3-fpm as php
 
 ARG MAGENTO_ROOT=/home/magento
 

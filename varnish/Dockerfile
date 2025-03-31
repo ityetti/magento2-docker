@@ -1,4 +1,4 @@
-FROM arm64v8/varnish:7.3
+FROM arm64v8/varnish:7.6
 
 USER root
 
