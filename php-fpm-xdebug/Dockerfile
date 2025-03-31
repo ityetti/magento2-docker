@@ -10,6 +10,9 @@ ENV UPLOAD_MAX_FILESIZE 64M
 ENV PHPRC ${MAGENTO_ROOT}/php.ini
 ENV PHP_EXTENSIONS bcmath bz2 calendar exif gd gettext intl mysqli opcache pdo_mysql redis soap sockets sodium sysvmsg sysvsem sysvshm xsl zip pcntl
 
+# Configure Node.js version
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash
+
 # Install dependencies
 RUN apt-get update \
   && apt-get upgrade -y \
@@ -99,6 +102,11 @@ RUN chmod +x /usr/local/bin/composer
 RUN wget https://files.magerun.net/n98-magerun2.phar \
     && chmod +x n98-magerun2.phar \
     && mv n98-magerun2.phar /usr/local/bin/n98-magerun2
+
+# Install Grunt
+RUN apt-get update
+RUN apt-get install -y nodejs
+RUN npm install -g grunt-cli
 
 COPY etc/php-fpm.ini /usr/local/etc/php/conf.d/magento.ini
 COPY etc/php-xdebug.ini /usr/local/etc/php/conf.d/xdebug-settings.ini
