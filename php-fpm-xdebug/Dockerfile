@@ -84,7 +84,7 @@ RUN pecl install -o -f \
   pcov \
   raphf \
   redis \
-  xdebug-3.2.2 \
+  xdebug-3.4.2 \
   xmlrpc-1.0.0RC3 \
   yaml
 
